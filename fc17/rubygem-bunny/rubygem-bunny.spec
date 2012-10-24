@@ -4,7 +4,7 @@
 
 Summary: Synchronous Ruby AMQP 0.9.1 client
 Name: rubygem-%{gem_name}
-Version: 0.7.9
+Version: 0.8.0
 Release: 1%{?dist}
 Group: Development/Languages
 License: MIT
@@ -78,6 +78,9 @@ cp -a .%{gem_dir}/* \
 %doc %{gem_instdir}/Rakefile
 
 %changelog
+* Tue Oct 23 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.8.0-1
+- Upgrade to 0.8.0
+
 * Mon Apr 30 2012  <rpms@courteau.org> - 0.7.9-1
 - Initial package
 - Submitted https://github.com/ruby-amqp/bunny/issues/55 upstream to remove dot-files
