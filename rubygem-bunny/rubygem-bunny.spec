@@ -1,6 +1,21 @@
-# Generated from bunny-0.7.9.gem by gem2rpm -*- rpm-spec -*-
+# -*- rpm-spec -*-
 %global gem_name bunny
+
+# EPEL6 lacks rubygems-devel package that provides these macros
+%if %{?el6}0
+%global gem_dir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global gem_instdir %{gem_dir}/gems/%{gem_name}-%{version}
+%global gem_docdir %{gem_dir}/doc/%{gem_name}-%{version}
+%global gem_libdir %{gem_instdir}/lib
+%global gem_cache %{gem_dir}/cache/%{gem_name}-%{version}.gem
+%global gem_spec %{gem_dir}/specifications/%{gem_name}-%{version}.gemspec
+%endif
+
+%if %{?el6}0 || %{?fc16}0
+%global rubyabi 1.8
+%else
 %global rubyabi 1.9.1
+%endif
 
 Summary: Synchronous Ruby AMQP 0.9.1 client
 Name: rubygem-%{gem_name}
@@ -15,8 +30,9 @@ Requires: ruby(abi) = %{rubyabi}
 Requires: ruby(rubygems) 
 BuildRequires: ruby 
 BuildRequires: ruby(abi) = %{rubyabi}
-BuildRequires: rubygems-devel 
-# Disabled for now; tests disabled
+BuildRequires: ruby(rubygems)
+%{!?el6:BuildRequires: rubygems-devel}
+# Disabled for now; tests disabled due to need for running rabbitmq server
 #BuildRequires: rubygem(rspec)
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
