@@ -1,11 +1,26 @@
 # Generated from moneta-0.6.0.gem by gem2rpm -*- rpm-spec -*-
+
 %global gem_name moneta
+# EPEL6 lacks rubygems-devel package that provides these macros
+%if %{?el6}0
+%global gem_dir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global gem_instdir %{gem_dir}/gems/%{gem_name}-%{version}
+%global gem_docdir %{gem_dir}/doc/%{gem_name}-%{version}
+%global gem_libdir %{gem_instdir}/lib
+%global gem_cache %{gem_dir}/cache/%{gem_name}-%{version}.gem
+%global gem_spec %{gem_dir}/specifications/%{gem_name}-%{version}.gemspec
+%endif
+
+%if %{?el6}0 || %{?fc16}0
+%global rubyabi 1.8
+%else
 %global rubyabi 1.9.1
+%endif
 
 Summary: A unified interface to key/value stores
 Name: rubygem-%{gem_name}
 Version: 0.6.0
-Release: 1%{?dist}
+Release: 3%{?dist}
 Group: Development/Languages
 License: MIT
 URL: https://github.com/wycats/moneta
@@ -61,6 +76,5 @@ cp -a .%{gem_dir}/* \
 %{gem_instdir}/Rakefile
 
 %changelog
-* Tue May 01 2012  <rpms@courteau.org> - 0.6.0-1
-- Initial package
-- not including tests at this time (not in the gem, and they have complicated requirements)
+* Sat Nov 24 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.6.0-3
+- Undeprecate package, rebuild with conditional ABI macros
