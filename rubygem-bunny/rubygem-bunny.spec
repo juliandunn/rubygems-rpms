@@ -19,7 +19,7 @@
 
 Summary: Synchronous Ruby AMQP 0.9.1 client
 Name: rubygem-%{gem_name}
-Version: 0.8.0
+Version: 0.7.9
 Release: 1%{?dist}
 Group: Development/Languages
 License: MIT
@@ -69,10 +69,6 @@ cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
 
 %check
-# Disabled check - requires a running rabbitmq server
-#pushd %{buildroot}%{gem_instdir}
-#rspec -Ilib spec/spec_09/*_spec.rb
-#popd
 
 %files
 %dir %{gem_instdir}
@@ -94,8 +90,8 @@ cp -a .%{gem_dir}/* \
 %doc %{gem_instdir}/Rakefile
 
 %changelog
-* Tue Oct 23 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.8.0-1
-- Upgrade to 0.8.0
+* Fri Nov 23 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.7.9-2
+- Cleanup after package review, bz #821285
 
 * Mon Apr 30 2012  <rpms@courteau.org> - 0.7.9-1
 - Initial package
