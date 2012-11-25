@@ -1,12 +1,26 @@
 # Generated from ohai-0.5.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name ohai
 
+# EPEL lacks rubygems-devel package that provides these macros
+%if %{?el5}0 || %{?el6}0
+%global gem_dir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global gem_instdir %{gem_dir}/gems/%{gem_name}-%{version}
+%global gem_docdir %{gem_dir}/doc/%{gem_name}-%{version}
+%global gem_libdir %{gem_instdir}/lib
+%global gem_cache %{gem_dir}/cache/%{gem_name}-%{version}.gem
+%global gem_spec %{gem_dir}/specifications/%{gem_name}-%{version}.gemspec
+%endif
+
+%if %{?el5}0 || %{?el6}0 || %{?fc16}0
+%global rubyabi 1.8
+%else
 %global rubyabi 1.9.1
+%endif
 
 Summary: Profiles your system and emits JSON
 Name: rubygem-%{gem_name}
-Version: 0.6.12
-Release: 2%{?dist}
+Version: 6.14.0
+Release: 1%{?dist}
 Group: Development/Languages
 License: ASL 2.0 
 URL: http://wiki.opscode.com/display/chef/Ohai
@@ -23,7 +37,10 @@ Requires: rubygem(mixlib-log)
 Requires: rubygem(yajl-ruby)
 Requires: rubygem(ipaddress)
 BuildRequires: ruby
+BuildRequires: ruby(rubygems)
+%if %{!?el5}0 && %{!?el6}0
 BuildRequires: rubygems-devel
+%endif
 BuildRequires: ruby(abi) = %{rubyabi}
 # For checks:
 BuildRequires: rubygem(rspec)
@@ -103,6 +120,10 @@ popd
 %doc %{gem_docdir}
 
 %changelog
+* Sun Nov 25 2012 Julian C. Dunn <jdunn@aquezada.com> - 6.14.0-1
+- Upgraded to 6.14.0
+- Unify spec to support Fedora & EPEL
+
 * Sun Jun 3 2012 Jonas Courteau <rpms@courteau.org> - 0.6.12-2
 - Re-enabled all tests
 - Added explicit external encoding for tests, pending http://tickets.opscode.com/browse/OHAI-379
