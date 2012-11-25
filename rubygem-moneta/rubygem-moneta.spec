@@ -20,7 +20,7 @@
 Summary: A unified interface to key/value stores
 Name: rubygem-%{gem_name}
 Version: 0.6.0
-Release: 3%{?dist}
+Release: 2%{?dist}
 Group: Development/Languages
 License: MIT
 URL: https://github.com/wycats/moneta
@@ -36,7 +36,8 @@ BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
 
 %description
-A unified interface to key/value stores
+Moneta provides a standard interface for interacting with various kinds of
+key/value stores including Memcache, Redis, CouchDB, Berkeley DB and many more.
 
 %package doc
 Summary: Documentation for %{name}
@@ -53,9 +54,6 @@ mkdir -p .%{gem_dir}
 gem install --local --install-dir .%{gem_dir} \
             --force %{SOURCE0}
 
-# Unneeded file
-rm .%{gem_instdir}/TODO
-
 %build
 
 %install
@@ -68,6 +66,7 @@ cp -a .%{gem_dir}/* \
 %{gem_libdir}
 %doc %{gem_instdir}/README
 %doc %{gem_instdir}/LICENSE
+%doc %{gem_instdir}/TODO
 %{gem_cache}
 %{gem_spec}
 
@@ -76,5 +75,8 @@ cp -a .%{gem_dir}/* \
 %{gem_instdir}/Rakefile
 
 %changelog
-* Sat Nov 24 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.6.0-3
+* Sat Nov 24 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.6.0-2
 - Undeprecate package, rebuild with conditional ABI macros
+
+* Tue Mar 16 2010 Matthew Kent <mkent@magoazul.com> - 0.6.0-1
+- Initial package
