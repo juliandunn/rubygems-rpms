@@ -30,7 +30,8 @@ Requires: ruby(abi) = %{rubyabi}
 Requires: ruby(rubygems) 
 BuildRequires: ruby 
 BuildRequires: ruby(abi) = %{rubyabi}
-BuildRequires: rubygems-devel 
+BuildRequires: ruby(rubygems)
+%{!?el6:BuildRequires: rubygems-devel}
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
 
@@ -61,7 +62,6 @@ rm .%{gem_instdir}/TODO
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
-
 
 %files
 %dir %{gem_instdir}
