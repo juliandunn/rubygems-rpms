@@ -20,17 +20,21 @@
 Summary: A unified interface to key/value stores
 Name: rubygem-%{gem_name}
 Version: 0.6.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Group: Development/Languages
 License: MIT
 URL: https://github.com/wycats/moneta
 Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
-Requires: ruby 
+# Tests:
+# git clone https://github.com/wycats/moneta.git && cd moneta
+# git checkout 0.6.0
+# tar -czf rubygem-moneta-0.6.0-specs.tgz spec/
+Source1: %{name}-%{version}-specs.tgz
 Requires: ruby(abi) = %{rubyabi}
 Requires: ruby(rubygems) 
-BuildRequires: ruby 
 BuildRequires: ruby(abi) = %{rubyabi}
 BuildRequires: ruby(rubygems)
+%{!?el6:BuildRequires: rubygem(rspec)}
 %{!?el6:BuildRequires: rubygems-devel}
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
@@ -54,6 +58,9 @@ mkdir -p .%{gem_dir}
 gem install --local --install-dir .%{gem_dir} \
             --force %{SOURCE0}
 
+# Unpack the tests
+tar zxvf %{SOURCE1}
+
 %build
 
 %install
@@ -61,20 +68,35 @@ mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
 
+%check
+# Note: Tests are disabled because the ones bundled with this version are
+# too old to run (they're RSpec 1.x tests). The ones in master are fine,
+# but haven't been released; if/when they do, uncomment the following:
+# %if %{!?el6}1
+# cp -pr spec/ .%{gem_instdir}
+# pushd ./%{gem_instdir}
+# rspec -Ilib spec/moneta_basic_file_spec.rb spec/moneta_file_spec.rb
+# rm -rf spec
+# popd
+# %endif
+
 %files
 %dir %{gem_instdir}
 %{gem_libdir}
-%doc %{gem_instdir}/README
 %doc %{gem_instdir}/LICENSE
-%doc %{gem_instdir}/TODO
-%{gem_cache}
+%exclude %{gem_cache}
 %{gem_spec}
 
 %files doc
 %doc %{gem_docdir}
+%doc %{gem_instdir}/README
+%doc %{gem_instdir}/TODO
 %{gem_instdir}/Rakefile
 
 %changelog
+* Thu Dec 13 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.6.0-3
+- Update spec after review
+
 * Sat Nov 24 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.6.0-2
 - Undeprecate package, rebuild with conditional ABI macros
 
