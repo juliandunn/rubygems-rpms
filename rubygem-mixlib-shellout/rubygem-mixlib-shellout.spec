@@ -30,9 +30,9 @@ Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
 # tar czvf rubygem-mixlib-shellout-1.1.0-specs.tgz spec/
 Source1: rubygem-%{gem_name}-%{version}-specs.tgz
 # Patch for UsrMove, see http://tickets.opscode.com/browse/MIXLIB-6
-Source2: mixlib-shellout-usrmove.patch
+Patch0: mixlib-shellout-usrmove.patch
 # Patch for removal of awesomeprint, see http://tickets.opscode.com/browse/MIXLIB-7
-Source3: mixlib-shellout-awesomeprint-removal.patch
+Patch1: mixlib-shellout-awesomeprint-removal.patch
 
 Requires: ruby(abi) > %{rubyabi}
 Requires: ruby(rubygems) 
@@ -70,8 +70,8 @@ cp -a .%{gem_dir}/* \
 %check
 pushd .%{gem_instdir}
 tar zxvf %{SOURCE1}
-patch -p1 < %{SOURCE2}
-patch -p1 < %{SOURCE3}
+patch -p1 < %{PATCH0}
+patch -p1 < %{PATCH1}
 # One of the tests involves a fork && sleep 10 that may not finish before mock
 rspec && sleep 10
 popd
@@ -83,7 +83,6 @@ popd
 %{gem_libdir}
 %exclude %{gem_cache}
 %{gem_spec}
-%exclude %{gem_instdir}/spec
 
 %files doc
 %doc %{gem_docdir}
