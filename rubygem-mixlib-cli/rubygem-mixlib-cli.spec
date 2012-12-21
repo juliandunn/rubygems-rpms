@@ -3,7 +3,7 @@
 
 %global rubyabi 1.9.1
 
-Summary: Simple ruby mix-in for CLI interfaces
+Summary: Simple Ruby mix-in for CLI interfaces
 Name: rubygem-%{gem_name}
 Version: 1.2.2
 Release: 1%{?dist}
@@ -70,6 +70,9 @@ popd
 %doc %{gem_docdir}
 
 %changelog
+* Wed Dec 13 2012 Julian C. Dunn <jdunn@aquezada.com> - 1.2.2-2
+- Unify build on EPEL6 and Fedora
+
 * Mon Apr 30 2012 Jonas Courteau <rpm@courteau.org> - 1.2.2-1
 - Repackaged for fc17
 - Changed check to avoid need for patch
