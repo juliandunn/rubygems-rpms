@@ -1,31 +1,36 @@
 # Generated from mixlib-log-1.0.3.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name mixlib-log
+# EPEL6 lacks rubygems-devel package that provides these macros
+%if %{?el6}0
+%global gem_dir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global gem_instdir %{gem_dir}/gems/%{gem_name}-%{version}
+%global gem_docdir %{gem_dir}/doc/%{gem_name}-%{version}
+%global gem_libdir %{gem_instdir}/lib
+%global gem_cache %{gem_dir}/cache/%{gem_name}-%{version}.gem
+%global gem_spec %{gem_dir}/specifications/%{gem_name}-%{version}.gemspec
+%endif
 
+%if %{?el6}0 || %{?fc16}0
+%global rubyabi 1.8
+%else
 %global rubyabi 1.9.1
+%endif
 
 Summary: Ruby mix-in for log functionality
 Name: rubygem-%{gem_name}
-Version: 1.3.0
+Version: 1.4.1
 Release: 1%{?dist}
 Group: Development/Languages
 License: ASL 2.0
 URL: http://github.com/opscode/mixlib-log
 Source0: http://gems.rubyforge.org/gems/%{gem_name}-%{version}.gem
-# See http://tickets.opscode.com/browse/CHEF-3169
-# Download tests seperately:
-# git clone http://github.com/opscode/mixlib-log.git && cd mixlib-log
-# git checkout 1.3.0
-# tar -czf rubygem-mixlib-log-1.3.0-specs.tgz spec/
-Source1: %{name}-%{version}-specs.tgz
 
-Requires: ruby
-Requires: ruby(rubygems)
 Requires: ruby(abi) = %{rubyabi}
-BuildRequires: ruby
-BuildRequires: rubygems-devel
+Requires: ruby(rubygems)
 BuildRequires: ruby(abi) = %{rubyabi}
-# Needed for check:
-BuildRequires: rubygem(rspec)
+BuildRequires: ruby(rubygems)
+%{!?el6:BuildRequires: rubygem(rspec)}
+%{!?el6:BuildRequires: rubygems-devel}
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
 
@@ -58,10 +63,13 @@ mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* %{buildroot}%{gem_dir}/
 
 %check
-pushd .%{gem_instdir}
-tar xzvf %{SOURCE1}
-rspec -Ilib spec/mixlib/log_spec.rb
+%if %{?el6}0
+# spec on EL6 is too old; need RSpec2 
+%else
+pushd ./%{gem_instdir}
+rspec
 popd
+%endif
 
 %files
 %doc %{gem_instdir}/LICENSE
@@ -72,11 +80,18 @@ popd
 %exclude %{gem_cache}
 %{gem_spec}
 %exclude %{gem_instdir}/spec
+%exclude %{gem_instdir}/.gemtest
+%exclude %{gem_instdir}/%{gem_name}.gemspec
+%exclude %{gem_instdir}/Rakefile
 
 %files doc
 %doc %{gem_docdir}
+%{gem_instdir}/spec
 
 %changelog
+* Fri Dec 21 2012 Julian C. Dunn <jdunn@aquezada.com> - 1.4.1-1
+- Rebuilt with 1.4.1, specs are bundled
+
 * Sun Apr 29 2012 Jonas Courteau <rpms@courteau.org> - 1.3.0-1
 - Repackaged for fc17
 - New upstream version
