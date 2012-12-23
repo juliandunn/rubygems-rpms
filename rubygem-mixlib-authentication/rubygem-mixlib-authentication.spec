@@ -29,7 +29,6 @@ Requires: ruby(rubygems)
 Requires: ruby(abi) = %{rubyabi}
 Requires: rubygem(mixlib-log)
 BuildRequires: ruby
-BuildRequires: rubygems-devel
 BuildRequires: ruby(abi) = %{rubyabi}
 # Needed to run checks:
 %{!?el6:BuildRequires: rubygem(rspec)}
@@ -77,17 +76,17 @@ popd
 %endif
 
 %files
-%doc %{gem_instdir}/README.rdoc
 %doc %{gem_instdir}/LICENSE
-%doc %{gem_instdir}/NOTICE
 %dir %{gem_instdir}
 %{gem_libdir}
-%{gem_cache}
 %{gem_spec}
+%exclude %{gem_cache}
 %exclude %{gem_instdir}/spec
 
 %files doc
+%{gem_instdir}/NOTICE
 %{gem_instdir}/Rakefile
+%{gem_instdir}/README.rdoc
 %{gem_instdir}/spec
 %doc %{gem_docdir}
 
