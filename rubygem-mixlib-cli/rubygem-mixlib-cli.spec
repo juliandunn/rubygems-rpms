@@ -1,24 +1,36 @@
 # Generated from mixlib-cli-1.0.4.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name mixlib-cli
 
+# EPEL6 lacks rubygems-devel package that provides these macros
+%if %{?el6}0
+%global gem_dir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global gem_instdir %{gem_dir}/gems/%{gem_name}-%{version}
+%global gem_docdir %{gem_dir}/doc/%{gem_name}-%{version}
+%global gem_libdir %{gem_instdir}/lib
+%global gem_cache %{gem_dir}/cache/%{gem_name}-%{version}.gem
+%global gem_spec %{gem_dir}/specifications/%{gem_name}-%{version}.gemspec
+%endif
+
+%if %{?el6}0 || %{?fc16}0
+%global rubyabi 1.8
+%else
 %global rubyabi 1.9.1
+%endif
 
 Summary: Simple Ruby mix-in for CLI interfaces
 Name: rubygem-%{gem_name}
 Version: 1.2.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: Development/Languages
 License: ASL 2.0
 URL: http://github.com/opscode/mixlib-cli
 Source0: http://gems.rubyforge.org/gems/%{gem_name}-%{version}.gem
 Requires: ruby(rubygems)
-Requires: ruby
 Requires: ruby(abi) = %{rubyabi}
-BuildRequires: ruby
-BuildRequires: rubygems-devel
+%{!?el6:BuildRequires: rubygems-devel}
+%{!?el6:BuildRequires: rubygem(rspec)}
 BuildRequires: ruby(abi) = %{rubyabi}
-# Needed to run checks:
-BuildRequires: rubygem(rspec)
+BuildRequires: rubygem(rake)
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
 
@@ -51,23 +63,29 @@ mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* %{buildroot}%{gem_dir}/
 
 %check
+%if %{?el6}0
+# spec on EL6 is too old; need RSpec2 
+%else
 pushd .%{gem_instdir}
-rspec -Ilib spec/mixlib/cli_spec.rb
+rspec
+#rspec -Ilib spec/mixlib/cli_spec.rb
 popd
+%endif
 
 %files
 %doc %{gem_instdir}/LICENSE
-%doc %{gem_instdir}/NOTICE
-%doc %{gem_instdir}/README.rdoc
 %dir %{gem_instdir}
-%{gem_instdir}/Rakefile
 %{gem_libdir}
-%{gem_cache}
 %{gem_spec}
+%exclude %{gem_cache}
+%exclude %{gem_instdir}/Rakefile
 %exclude %{gem_instdir}/spec
 
 %files doc
-%doc %{gem_docdir}
+%{gem_docdir}
+%{gem_instdir}/Rakefile
+%{gem_instdir}/NOTICE
+%{gem_instdir}/README.rdoc
 
 %changelog
 * Wed Dec 13 2012 Julian C. Dunn <jdunn@aquezada.com> - 1.2.2-2
