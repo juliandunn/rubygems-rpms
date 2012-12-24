@@ -1,7 +1,21 @@
 # Generated from mixlib-config-1.0.9.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name mixlib-config
 
+# EPEL6 lacks rubygems-devel package that provides these macros
+%if %{?el6}0
+%global gem_dir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global gem_instdir %{gem_dir}/gems/%{gem_name}-%{version}
+%global gem_docdir %{gem_dir}/doc/%{gem_name}-%{version}
+%global gem_libdir %{gem_instdir}/lib
+%global gem_cache %{gem_dir}/cache/%{gem_name}-%{version}.gem
+%global gem_spec %{gem_dir}/specifications/%{gem_name}-%{version}.gemspec
+%endif
+
+%if %{?el6}0 || %{?fc16}0
+%global rubyabi 1.8
+%else
 %global rubyabi 1.9.1
+%endif
 
 Summary: Simple ruby config mix-in
 Name: rubygem-%{gem_name}
@@ -11,14 +25,13 @@ Group: Development/Languages
 License: ASL 2.0
 URL: http://github.com/opscode/mixlib-config
 Source0: http://gems.rubyforge.org/gems/%{gem_name}-%{version}.gem
-Requires: ruby
 Requires: ruby(rubygems)
 Requires: ruby(abi) = %{rubyabi}
-BuildRequires: ruby
-BuildRequires: rubygems-devel
 BuildRequires: ruby(abi) = %{rubyabi}
+# Needed to run checks:
+%{!?el6:BuildRequires: rubygem(rspec)}
+%{!?el6:BuildRequires: rubygems-devel}
 # Needed for check:
-BuildRequires: rubygem(rspec)
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
 
@@ -54,27 +67,34 @@ cp -a .%{gem_dir}/* %{buildroot}%{gem_dir}/
 rm %{buildroot}%{gem_instdir}/.gitignore
 
 %check
+%if %{?el6}0
+# spec on EL6 is too old; need RSpec2
+%else
 pushd .%{gem_instdir}
 rspec -Ilib spec/mixlib/config_spec.rb
 popd
+%endif
 
 %files
 %doc %{gem_instdir}/LICENSE
-%doc %{gem_instdir}/NOTICE
-%doc %{gem_instdir}/README.rdoc
 %dir %{gem_instdir}
-%{gem_instdir}/Rakefile
-%{gem_instdir}/VERSION.yml
 %{gem_libdir}
-%{gem_cache}
 %{gem_spec}
 %exclude %{gem_instdir}/spec
 
 %files doc
 %{gem_instdir}/features
 %doc %{gem_docdir}
+%doc %{gem_instdir}/NOTICE
+%doc %{gem_instdir}/README.rdoc
+%{gem_instdir}/Rakefile
+%{gem_instdir}/VERSION.yml
+%{gem_cache}
 
 %changelog
+* Sun Dec 23 2012 Julian C. Dunn <jdunn@aquezada.com> - 1.1.2-2
+- Revised per review in bz#823334
+
 * Mon Apr 30 2012 Jonas Courteau <rpm@courteau.org> - 1.1.2-1
 - Repackaged for fc17
 - Call tests directly, eliminating need for patch, Rakefile modification
