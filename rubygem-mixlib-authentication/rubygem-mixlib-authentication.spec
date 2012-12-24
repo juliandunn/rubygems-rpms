@@ -28,7 +28,6 @@ Source0: http://gems.rubyforge.org/gems/%{gem_name}-%{version}.gem
 Requires: ruby(rubygems)
 Requires: ruby(abi) = %{rubyabi}
 Requires: rubygem(mixlib-log)
-BuildRequires: ruby
 BuildRequires: ruby(abi) = %{rubyabi}
 # Needed to run checks:
 %{!?el6:BuildRequires: rubygem(rspec)}
