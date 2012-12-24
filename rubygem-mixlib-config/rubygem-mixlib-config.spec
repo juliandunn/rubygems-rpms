@@ -25,6 +25,7 @@ Group: Development/Languages
 License: ASL 2.0
 URL: http://github.com/opscode/mixlib-config
 Source0: http://gems.rubyforge.org/gems/%{gem_name}-%{version}.gem
+Patch0: mixlib-config-silence-tests.patch
 Requires: ruby(rubygems)
 Requires: ruby(abi) = %{rubyabi}
 BuildRequires: ruby(abi) = %{rubyabi}
@@ -57,6 +58,10 @@ gem install -V \
   --force --rdoc \
   %{SOURCE0}
 
+pushd .%{gem_instdir}
+%patch0 -p1
+popd
+
 %build
 
 %install
@@ -71,7 +76,7 @@ rm %{buildroot}%{gem_instdir}/.gitignore
 # spec on EL6 is too old; need RSpec2
 %else
 pushd .%{gem_instdir}
-rspec -Ilib spec/mixlib/config_spec.rb
+rspec
 popd
 %endif
 
@@ -80,7 +85,7 @@ popd
 %dir %{gem_instdir}
 %{gem_libdir}
 %{gem_spec}
-%exclude %{gem_instdir}/spec
+%exclude %{gem_cache}
 
 %files doc
 %{gem_instdir}/features
@@ -89,7 +94,7 @@ popd
 %doc %{gem_instdir}/README.rdoc
 %{gem_instdir}/Rakefile
 %{gem_instdir}/VERSION.yml
-%{gem_cache}
+%{gem_instdir}/spec
 
 %changelog
 * Sun Dec 23 2012 Julian C. Dunn <jdunn@aquezada.com> - 1.1.2-2
