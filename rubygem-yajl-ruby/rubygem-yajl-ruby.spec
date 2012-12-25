@@ -20,7 +20,7 @@
 Summary: Ruby C bindings to the excellent Yajl JSON stream-based parser library
 Name: rubygem-%{gem_name}
 Version: 1.1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: Development/Languages
 License: MIT
 URL: http://github.com/brianmario/yajl-ruby
