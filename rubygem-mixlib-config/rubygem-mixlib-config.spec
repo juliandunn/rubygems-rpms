@@ -20,7 +20,7 @@
 Summary: Simple ruby config mix-in
 Name: rubygem-%{gem_name}
 Version: 1.1.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: Development/Languages
 License: ASL 2.0
 URL: http://github.com/opscode/mixlib-config
@@ -98,7 +98,7 @@ popd
 
 %changelog
 * Sun Dec 23 2012 Julian C. Dunn <jdunn@aquezada.com> - 1.1.2-2
-- Revised per review in bz#823334
+- Silence tests & unify spec between Fedora/EPEL.
 
 * Mon Apr 30 2012 Jonas Courteau <rpm@courteau.org> - 1.1.2-1
 - Repackaged for fc17
