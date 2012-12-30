@@ -20,7 +20,7 @@
 Summary: IPv4/IPv6 addresses manipulation library
 Name: rubygem-%{gem_name}
 Version: 0.8.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Group: Development/Languages
 License: MIT
 URL: http://github.com/bluemonk/ipaddress
@@ -82,12 +82,14 @@ popd
 %files doc
 %doc %{gem_docdir}
 %{gem_instdir}/README.rdoc
-%{gem_instdir}/LICENSE
 %{gem_instdir}/VERSION
 %{gem_instdir}/CHANGELOG.rdoc
 %{gem_instdir}/Rakefile
 
 %changelog
+* Sat Dec 29 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.8.0-3
+- Correct duplicate LICENSE file
+
 * Thu Dec 27 2012 Julian C. Dunn <jdunn@aquezada.com> - 0.8.0-2
 - Revised per review in bz#823340
 
