@@ -20,7 +20,7 @@
 Summary: Simple per-request authentication
 Name: rubygem-%{gem_name}
 Version: 1.3.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: Development/Languages
 License: ASL 2.0
 URL: http://github.com/opscode/mixlib-authentication
@@ -28,6 +28,7 @@ Source0: http://gems.rubyforge.org/gems/%{gem_name}-%{version}.gem
 Requires: ruby(rubygems)
 Requires: ruby(abi) = %{rubyabi}
 Requires: rubygem(mixlib-log)
+BuildRequires: ruby
 BuildRequires: ruby(abi) = %{rubyabi}
 # Needed to run checks:
 %{!?el6:BuildRequires: rubygem(rspec)}
@@ -80,12 +81,11 @@ popd
 %{gem_libdir}
 %{gem_spec}
 %exclude %{gem_cache}
-%exclude %{gem_instdir}/spec
 
 %files doc
-%{gem_instdir}/NOTICE
+%doc %{gem_instdir}/NOTICE
 %{gem_instdir}/Rakefile
-%{gem_instdir}/README.rdoc
+%doc %{gem_instdir}/README.rdoc
 %{gem_instdir}/spec
 %doc %{gem_docdir}
 
