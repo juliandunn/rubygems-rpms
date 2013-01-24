@@ -25,18 +25,15 @@ Group: Development/Languages
 License: ASL 2.0 
 URL: http://wiki.opscode.com/display/chef/Ohai
 Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
-Requires: ruby
 Requires: ruby(rubygems)
 Requires: ruby(abi) = %{rubyabi}
 Requires: rubygem(json)
-Requires: rubygem(extlib)
 Requires: rubygem(systemu)
 Requires: rubygem(mixlib-cli)
 Requires: rubygem(mixlib-config)
 Requires: rubygem(mixlib-log)
 Requires: rubygem(yajl-ruby)
 Requires: rubygem(ipaddress)
-BuildRequires: ruby
 BuildRequires: ruby(rubygems)
 %if %{!?el5}0 && %{!?el6}0
 BuildRequires: rubygems-devel
@@ -120,6 +117,10 @@ popd
 %doc %{gem_docdir}
 
 %changelog
+* Thu Jan 24 2012 Julian C. Dunn <jdunn@aquezada.com> - 6.16.0-1
+- Upgraded to 6.16.0
+- extlib no longer needed
+
 * Sun Nov 25 2012 Julian C. Dunn <jdunn@aquezada.com> - 6.14.0-1
 - Upgraded to 6.14.0
 - Unify spec to support Fedora & EPEL
